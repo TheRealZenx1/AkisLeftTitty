@@ -6,11 +6,8 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
 local ExploitGUIManager = {}
-
--- Keep track of all windows
 ExploitGUIManager.Windows = {}
 
--- Utility: Create rounded frame
 local function createRoundedFrame(parent, size, position, bgColor)
 	local frame = Instance.new("Frame")
 	frame.Size = size
@@ -26,7 +23,6 @@ local function createRoundedFrame(parent, size, position, bgColor)
 	return frame
 end
 
--- Utility: Create label
 local function createLabel(parent, text, size)
 	local label = Instance.new("TextLabel")
 	label.Size = size or UDim2.new(1, 0, 0, 24)
@@ -40,7 +36,6 @@ local function createLabel(parent, text, size)
 	return label
 end
 
--- Utility: Create button with callback
 local function createButton(parent, text, callback)
 	local btn = Instance.new("TextButton")
 	btn.Size = UDim2.new(1, 0, 0, 35)
@@ -71,7 +66,6 @@ local function createButton(parent, text, callback)
 	return btn
 end
 
--- Utility: Create slider with callback (0 to 100)
 local function createSlider(parent, name, min, max, default, callback)
 	local container = Instance.new("Frame")
 	container.Size = UDim2.new(1, 0, 0, 60)
@@ -132,7 +126,6 @@ local function createSlider(parent, name, min, max, default, callback)
 	return container
 end
 
--- Utility: Create textbox with callback (on text change)
 local function createTextbox(parent, placeholder, callback)
 	local tb = Instance.new("TextBox")
 	tb.Size = UDim2.new(1, 0, 0, 32)
@@ -158,22 +151,17 @@ local function createTextbox(parent, placeholder, callback)
 	return tb
 end
 
--- Create draggable window
 function ExploitGUIManager.CreateWindow(title)
-	-- ScreenGui
 	local screenGui = Instance.new("ScreenGui")
 	screenGui.Name = title:gsub(" ", "") .. "Window"
 	screenGui.Parent = playerGui
 	screenGui.ResetOnSpawn = false
 
-	-- Main frame
 	local mainFrame = createRoundedFrame(screenGui, UDim2.new(0, 400, 0, 450), UDim2.new(0.5, -200, 0.5, -225), Color3.fromRGB(20, 20, 25))
 
-	-- Title bar
 	local titleBar = createRoundedFrame(mainFrame, UDim2.new(1, 0, 0, 35), UDim2.new(0, 0, 0, 0), Color3.fromRGB(35, 35, 45))
 	titleBar.ClipsDescendants = true
 
-	-- Title label
 	local titleLabel = Instance.new("TextLabel")
 	titleLabel.Size = UDim2.new(1, -40, 1, 0)
 	titleLabel.Position = UDim2.new(0, 10, 0, 0)
@@ -185,7 +173,6 @@ function ExploitGUIManager.CreateWindow(title)
 	titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 	titleLabel.Parent = titleBar
 
-	-- Close button
 	local closeButton = Instance.new("TextButton")
 	closeButton.Size = UDim2.new(0, 35, 0, 35)
 	closeButton.Position = UDim2.new(1, -40, 0, 0)
@@ -213,7 +200,6 @@ function ExploitGUIManager.CreateWindow(title)
 		ExploitGUIManager.Windows[title] = nil
 	end)
 
-	-- Drag logic
 	local dragging = false
 	local dragInput, dragStart, startPos
 
@@ -253,21 +239,19 @@ function ExploitGUIManager.CreateWindow(title)
 		end
 	end)
 
-	-- Content frame for controls
 	local contentFrame = Instance.new("Frame")
 	contentFrame.Size = UDim2.new(1, -20, 1, -50)
 	contentFrame.Position = UDim2.new(0, 10, 0, 45)
 	contentFrame.BackgroundTransparency = 1
 	contentFrame.Parent = mainFrame
 
-	-- Store the window's UI elements & utilities
+	-- API
 	local window = {
 		ScreenGui = screenGui,
 		MainFrame = mainFrame,
 		TitleBar = titleBar,
 		ContentFrame = contentFrame,
 
-		-- API to add controls:
 		AddButton = function(self, text, callback)
 			return createButton(contentFrame, text, callback)
 		end,
